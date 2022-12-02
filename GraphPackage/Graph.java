@@ -32,7 +32,30 @@ public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterfac
 	    return traversalOrder;
     }
     public QueueInterface<T> getDepthFirstTraversal(T origin) {
-
+    	//assumes graph is not empty
+    	resetVertices();
+    	QueueInterface<T> traversalOrder = new LinkedQueue<T>;
+    	StackInterface<VertexInterface<T>> vertexStack = new LinkedStack<>();
+    	
+    	VertexInterface<T> originVertex = vertices.getValue(origin);
+    	originVertex.visit();
+    	traversalOrder.enqueue(origin);;
+    	vertexStack.push(originVertex);
+    	
+    	while(!vertexStack.isEmpty()) {
+    		vertexInterface<T> topVertex = vertexStack.peek();
+    		vertexInterface<T> nextNeighbor = topVertex.getUnvisitedNeighbor();
+    		
+    		if (nextNeighbor != null) {
+    			nextNeighbor.visit();
+    			traversalOrder.enqueue(nextNeigbor.getLabel());
+    			vertexStack.push(nextNeighbor);
+    		}
+    		else
+    			vertexStack.pop();
+    	}
+    	return traversalOrder;
+    	
     }
     public StackInterface<T> getTopologicalOrder() {
 
