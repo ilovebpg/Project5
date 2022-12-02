@@ -2,7 +2,6 @@ package GraphPackage;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import ADTPackage.*; // Classes that implement various ADTs
-import java.util.Stack;
 /**
  A class of vertices for a graph.
  @author Frank M. Carrano
@@ -10,6 +9,7 @@ import java.util.Stack;
  @version 5.0
  */
 class Vertex<T> implements VertexInterface<T> {
+	
    private T label;
    private ListWithIteratorInterface<Edge> edgeList; // Edges to neighbors
    private boolean visited;                          // True if visited
@@ -23,6 +23,9 @@ class Vertex<T> implements VertexInterface<T> {
       previousVertex = null;
       cost = 0;
    } // end constructor
+   
+   /* Implementations of the vertex operations go here.
+   . . . */
 
    public T getLabel() {
       return label;
@@ -64,10 +67,6 @@ class Vertex<T> implements VertexInterface<T> {
 
    public Iterator<VertexInterface<T>> getNeighborIterator() {
       return new NeighborIterator();
-   }
-
-   public Iterator<Double> getWeightIterator() {
-
    }
 
    public boolean hasNeighbor() {
