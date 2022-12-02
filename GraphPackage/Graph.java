@@ -1,40 +1,41 @@
 package GraphPackage;
+import java.util.Iterator;
 import ADTPackage.*;
-import java.util.VertexInterface;
-import java.util.vertex;
-import javax.swing.text.html.HTMLDocument.Iterator;
 
-public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterface<T>{
+public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterface<T> {
 
-    public QueueInterface<T> getBreadthFirstTraversal(T origin) {
-        resetVertices();
-	    QueueInterface<T> traversalOrder = new LinkedQueue();
-	    QueueInterface<VertexInterface<T>> vertex = new LinkedQueue<VertexInterface<T>>();
+	public QueueInterface<T> getBreadthFirstTraversal(T origin) {
+		
+		 resetVertices();
+		    QueueInterface<T> traversalOrder = new LinkedQueue<T>();
+		    QueueInterface<VertexInterface<T>> vertex = new LinkedQueue<VertexInterface<T>>();
 
-	    VertexInterface<T> originVertex = vertices.getValue(origin);
-	    originVertex.visit();
-	    traversalOrder.enqueue(originVertex);
-	
-	    while (!vertexQueue.isEmpty()) {
-		    VertexInterface<T> frontVertex = vertexQueue.dequeue();
+		    VertexInterface<T> originVertex = vertices.getValue(origin);
+		    originVertex.visit();
+		    traversalOrder.enqueue(originVertex);
+			vertexQueue.enqueue(originVertex);
+		
+			while (!vertexQueue.isEmpty()) {
+			    VertexInterface<T> frontVertex = vertexQueue.dequeue();
 
-		    Iterator<VertexInterface<T>> neighbors = frontVertex.getNeighborsIterator();
+			    Iterator<VertexInterface<T>> neighbors = frontVertex.getNeighborIterator();
 
-		    while (neighbors.hasNext) {
-			    VertexInterface<T> nextNeighbor = newNeighbors.next();
-			    if  (!nextNeighbor.isVisited()) {
-				    nextNeighbor.visit();
-				    traversalOrder.enqueue(nextNeighbor.getLabel());
-				    vertexQueue.enqueue(nextNeighbor);
-			    }  //end if
-		    } //end while
-	    }  //end while
-	    return traversalOrder;
-    }
-    public QueueInterface<T> getDepthFirstTraversal(T origin) {
-    	//assumes graph is not empty
-    	resetVertices();
-    	QueueInterface<T> traversalOrder = new LinkedQueue<T>;
+			    while (neighbors.hasNext) {
+				    VertexInterface<T> nextNeighbor = neighbors.next();
+				    if  (!nextNeighbor.isVisited()) {
+					    nextNeighbor.visit();
+					    traversalOrder.enqueue(nextNeighbor.getLabel());
+					    vertexQueue.enqueue(nextNeighbor);
+				    }  //end if
+			    } //end while
+		    }  //end while
+		    return traversalOrder;
+	    }
+
+	public QueueInterface<T> getDepthFirstTraversal(T origin) {
+		
+		resetVertices();
+    	QueueInterface<T> traversalOrder = new LinkedQueue<T>();
     	StackInterface<VertexInterface<T>> vertexStack = new LinkedStack<>();
     	
     	VertexInterface<T> originVertex = vertices.getValue(origin);
@@ -43,47 +44,28 @@ public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterfac
     	vertexStack.push(originVertex);
     	
     	while(!vertexStack.isEmpty()) {
-    		vertexInterface<T> topVertex = vertexStack.peek();
-    		vertexInterface<T> nextNeighbor = topVertex.getUnvisitedNeighbor();
+    		VertexInterface<T> topVertex = vertexStack.peek();
+    		VertexInterface<T> nextNeighbor = topVertex.getUnvisitedNeighbor();
     		
     		if (nextNeighbor != null) {
     			nextNeighbor.visit();
-    			traversalOrder.enqueue(nextNeigbor.getLabel());
+    			VertexInterface<T> nextNeigbor;
+				traversalOrder.enqueue(nextNeigbor.getLabel());
     			vertexStack.push(nextNeighbor);
     		}
     		else
     			vertexStack.pop();
     	}
     	return traversalOrder;
+	}
+
+	 public boolean addEdge(T begin, T end) {
+		 
+	        return addEdge(begin, end);
+	    }
+
+	public boolean hasEdge(T begin, T end) {
     	
-    }
-    public StackInterface<T> getTopologicalOrder() {
-
-    }
-    public int getShortestPath(T begin, T end, StackInterface<T> path) {
-
-    }
-    public double getCheapestPath(T begin, T end, StackInterface<T> path) {
-
-    }
-    public boolean addVertex(T vertexLabel) {
-        VertexInterface<T> addOutcome = vertices.add(vertexLabel, new Vertex<>(vertexLabel));
-        return addOutcome == null; // Was addition to dictionary successful?
-    }
-    public boolean addEdge(T begin, T end, double edgeWeight) {
-        boolean result = false;
-        VertexInterface<T> beginVertex = vertices.getValue(begin);
-        VertexInterface<T> endVertex = vertices.getValue(end);
-        if ( (beginVertex != null) && (endVertex != null) )
-            result = beginVertex.connect(endVertex, edgeWeight);
-        if (result)
-            edgeCount++;
-        return result;
-    }
-    public boolean addEdge(T begin, T end) {
-        return addEdge(begin, end, 0);
-    }
-    public boolean hasEdge(T begin, T end) {
         boolean found = false;
         VertexInterface<T> beginVertex = vertices.getValue(begin);
         VertexInterface<T> endVertex = vertices.getValue(end);
@@ -97,17 +79,46 @@ public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterfac
         } // end if
         return found;
     }
-    public boolean isEmpty() {
-        return vertices.isEmpty();
-    }
-    public int getNumberOfVertices() {
+
+	public boolean isEmpty() {
+		return vertices.isEmpty();
+	}
+
+	public int getNumberOfVertices() {
         return vertices.getSize();
     }
-    public int getNumberOfEdges() {
-        return edgeCount;
-    }
-    public void clear() {
-        vertices.clear();
-        edgeCount = 0; 
-    }
+
+	public int getNumberOfEdges() {
+	       return edgeCount;
+	}
+	
+	public void clear() {
+	        vertices.clear();
+	        edgeCount = 0; 
+	}
+	
+	public void resetVertices() {
+		Iterator<VertexInterface<T>> vertexIterator = vertices.getValueIterator();
+		while (vertexIterator.hasNext())
+		{
+		VertexInterface<T> nextVertex = vertexIterator.next();
+		nextVertex.unvisit();
+		nextVertex.setCost(0);
+		nextVertex.setPredecessor(null);
+		} 
+	}
+
+
+	public void DirectedGraph() {
+		
+	}
+		private DictionaryInterface<T, VertexInterface<T>> vertices;
+		private int edgeCount;
+		
+		{
+			vertices = new LinkedDictionary<>();
+			edgeCount = 0;
+		
+	}
 }
+
