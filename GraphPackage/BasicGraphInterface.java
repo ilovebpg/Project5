@@ -8,12 +8,7 @@ package GraphPackage;
    @version 5.0
 */
 public interface BasicGraphInterface<T> {
-    /** Adds a given vertex to this graph.
-    @param vertexLabel  An object that labels the new vertex and is
-                        distinct from the labels of current vertices.
-    @return             True if the vertex is added, or false if not. */
-    public boolean addVertex(T vertexLabel);
-
+    
     /** Adds a weighted edge between two given distinct vertices that 
         are currently in this graph. The desired edge must not already 
         be in the graph. In a directed graph, the edge points toward
@@ -55,4 +50,8 @@ public interface BasicGraphInterface<T> {
 
     /** Removes all vertices and edges from this graph resulting in an empty graph. */
     public void clear();
+    
+    public void resetVertices();
+    
+    public void DirectedGraph();
 } // end BasicGraphInterface
