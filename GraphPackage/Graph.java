@@ -85,6 +85,6 @@ public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterfac
     }
     public void clear() {
         vertices.clear();
-        edgeCount = 0;
+        edgeCount = 0; 
     }
 }
