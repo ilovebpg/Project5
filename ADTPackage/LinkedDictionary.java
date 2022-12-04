@@ -1,60 +1,115 @@
 package ADTPackage;
 import java.util.Iterator;
 
-public class LinkedDictionary<K , V> implements DictionaryInterface<K , V>{
+public class LinkedDictionary<K , V, T> implements DictionaryInterface<K , V>{
 
-	@Override
+	private Node firstNode;
+	private int numberOfEntries;
+	
+	public LinkedDictionary() {
+		firstNode = null;
+		numberOfEntries = 0;
+	}
+	
 	public V add(K key, V value) {
-		// TODO Auto-generated method stub
-		return null;
+		V result = null;
+		if((key == null) || (value ==null))
+			throw new IllegalArgumentException("Does not except null");
+		else {
+			Node currentNode = firstNode;
+			Node nodeBefore = null;
+			while ((currentNode != null) && key.compareTo(currentNode.getKey()) > 0) {
+				nodeBefore = currentNode;
+				currentNode = currentNode.getNextNode();
+			}
+			
+			if ((currentNode != null) && (key.equals(currentNode.getKey()))) {
+				result = currentNode.getValue();
+				
+				currentNode.setValue(value);
+			}
+			else {
+				Node newNode = new Node(key , value);
+				
+				if(nodeBefore == null) {
+					newNode.setNextNode(firstNode);
+					firstNode = newNode;
+				}
+				else {
+					newNode.setNextNode(currentNode);
+					nodeBefore.setNextNode(newNode);
+				}
+				
+				numberOfEntries++;
+			}
+		}
+		return result;
 	}
 
-	@Override
 	public V remove(K key) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
-	@Override
 	public V getValue(K key) {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 
-	@Override
 	public boolean contains(K key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Iterator<K> getKeyIterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Iterator<V> getValueIterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int getSize() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
 		
+		return false;
 	}
+
+	public Iterator<K> getKeyIterator() {
+	
+		return null;
+	}
+
+	public Iterator<V> getValueIterator() {
+	
+		return null;
+	}
+
+	public boolean isEmpty() {
+
+		return false;
+	}
+
+	public int getSize() {
+		return numberOfEntries;
+	}
+
+	public void clear() {
+		firstNode = null;
+	}
+	private class Node 
+	   {
+	      private Node next; // Link to next node
+	      private Node value;
+	      
+	      private Node(T dataPortion)
+	      {
+	         next = null;
+	      } // end constructor
+	      
+	      private Node(T dataPortion, Node nextNode)
+	      {
+	         next = nextNode;
+	      } // end constructor
+	      
+	      private Node getNextNode()
+	      {
+	         return next;
+	      } // end getNextNode
+	      
+	      private void setNextNode(Node nextNode)
+	      {
+	         next = nextNode;
+	      } // end setNextNode
+	      private Node getValue() {
+	    	  return value;
+	      }
+		} // end Node
 
 }

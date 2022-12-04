@@ -11,15 +11,32 @@ import java.util.NoSuchElementException;
 */
 public class LinkedListWithIterator<T> {
    private Node firstNode;
-   private int  numberOfEntries;;
+   private int  numberOfEntries;
+   
+   private void initializeDataFields() {
+	   firstNode = null;
+	   numberOfEntries = 0;
+   }
 
    public LinkedListWithIterator() {
       initializeDataFields();
    } // end default constructor
 
+   
+   public boolean isEmpty() {
+	   return numberOfEntries == 0;
+   }
+   
    public void clear() {
       initializeDataFields();
    } //end clear
+   
+   private Node getNodeAt(int givenPosition) {
+	 	  Node currentNode=firstNode;
+	 	    for (int i =0; i < givenPosition; i++)
+	 	        currentNode=currentNode.next;
+	 	    return currentNode;
+	   }
 
    public void add(T newEntry) {
       Node newNode = new Node(newEntry);
@@ -128,12 +145,11 @@ public class LinkedListWithIterator<T> {
 			nextNode = firstNode;
 		} // end default constructor
 
-      @Override
+    
       public boolean hasNext() {
          return nextNode != null;
       }
 
-      @Override
       public T next() {
          T result;
 			if (hasNext()) {
