@@ -100,8 +100,6 @@ public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterfac
 		while (vertexIterator.hasNext()) {
 			VertexInterface<T> nextVertex = vertexIterator.next();
 			nextVertex.unvisit();
-			nextVertex.setCost(0);
-			nextVertex.setPredecessor(null);
 		} 
 	} //end resetVertices
 
