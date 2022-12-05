@@ -41,6 +41,4 @@ public interface BasicGraphInterface<T> {
     public void clear();
     
     public void resetVertices();
-    
-    public void DirectedGraph();
 } // end BasicGraphInterface

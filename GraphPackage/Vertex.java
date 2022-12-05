@@ -11,7 +11,7 @@ import ADTPackage.*; // Classes that implement various ADTs
 class Vertex<T> implements VertexInterface<T> {
 	
    private T label;
-   private ListWithIteratorInterface<Edge> edgeList; // Edges to neighbors
+   private LinkedListWithIterator<Edge> edgeList; // Edges to neighbors
    private boolean visited;                          // True if visited
    private VertexInterface<T> previousVertex;        // On path to this vertex
    private double cost;                              // Of path to this vertex
@@ -43,28 +43,6 @@ class Vertex<T> implements VertexInterface<T> {
 
    }
 
-   public boolean connect(VertexInterface<T> endVertex, double edgeWeight) {
-      boolean result = false;
-      if (!this.equals(endVertex)) {
-         Iterator<VertexInterface<T>> neighbors = getNeighborIterator();
-         boolean duplicateEdge = false;
-         while (!duplicateEdge && neighbors.hasNext()) {
-            VertexInterface<T> nextNeighbor = neighbors.next();
-            if (endVertex.equals(nextNeighbor))
-               duplicateEdge = true;
-         } //end while
-         if (!duplicateEdge) {
-            edgeList.add(new Edge(endVertex, edgeWeight));
-            result = true;
-         } //end if
-      } //end if
-      return result;
-   } //end connect
-
-   public boolean connect(VertexInterface<T> endVertex) {
-      return connect(endVertex, 0);
-   } //end connect
-
    public Iterator<VertexInterface<T>> getNeighborIterator() {
       return new NeighborIterator();
    }
@@ -83,26 +61,6 @@ class Vertex<T> implements VertexInterface<T> {
       } //end while
       return result;
    } //end getUnvisitedNeighbor
-
-   public void setPredecessor(VertexInterface<T> predecessor) {
-      
-   }
-
-   public VertexInterface<T> getPredecessor() {
-
-   }
-
-   public boolean hasPredecessor() {
-
-   }
-
-   public void setCost(double newCost) {
-      cost = newCost;
-   }
-
-   public double getCost() {
-      return cost;
-   }
 
    private class NeighborIterator implements Iterator<VertexInterface<T>> {
       private Iterator<Edge> edges;

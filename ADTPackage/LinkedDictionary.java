@@ -1,7 +1,9 @@
 package ADTPackage;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class LinkedDictionary<K , V, T> implements DictionaryInterface<K , V>{
+
+public class LinkedDictionary<K extends Comparable<? super K>, V> implements DictionaryInterface<K, V> {
 
 	private Node firstNode;
 	private int numberOfEntries;
@@ -47,13 +49,12 @@ public class LinkedDictionary<K , V, T> implements DictionaryInterface<K , V>{
 	}
 
 	public V remove(K key) {
-
-		return null;
+		
 	}
 
 	public V getValue(K key) {
 	
-		return null;
+		return getValue(key);
 	}
 
 	public boolean contains(K key) {
@@ -62,8 +63,7 @@ public class LinkedDictionary<K , V, T> implements DictionaryInterface<K , V>{
 	}
 
 	public Iterator<K> getKeyIterator() {
-	
-		return null;
+		  
 	}
 
 	public Iterator<V> getValueIterator() {
