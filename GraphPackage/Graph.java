@@ -1,29 +1,31 @@
 package GraphPackage;
-import java.util.Iterator;
 import ADTPackage.*;
+import java.util.EmptyStackException;
+import java.util.Iterator;
 
-public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterface<T> {
-	//declare private fields
-	private DictionaryInterface<T, VertexInterface<T>> vertices;
-	private int edgeCount;
 
-	public QueueInterface<T> getBreadthFirstTraversal(T origin) {
+public class Graph<E> implements GraphInterface<E> {
+    private boolean[][] edges; //edges[i][j]is true if there is a vertex from i to j
+    private E[] labels; //labels[i] contains the label for vertex i
+	private Object vertices;
+
+    public QueueInterface<E> getBreadthFirstTraversal(E origin) {
 		resetVertices();
-		QueueInterface<T> traversalOrder = new LinkedQueue<T>();
-		QueueInterface<VertexInterface<T>> vertexQueue = new LinkedQueue<VertexInterface<T>>();
+		QueueInterface<E> traversalOrder = new LinkedQueue<E>();
+		QueueInterface<VertexInterface<E>> vertexQueue = new LinkedQueue<VertexInterface<E>>();
 
-		VertexInterface<T> originVertex = vertices.getValue(origin);
+		VertexInterface<E> originVertex = vertices.getValue(origin);
 		originVertex.visit();
 		traversalOrder.enqueue(origin);
 		vertexQueue.enqueue(originVertex);
 		
 		while (!vertexQueue.isEmpty()) {
-		    VertexInterface<T> frontVertex = vertexQueue.dequeue();
+		    VertexInterface<E> frontVertex = vertexQueue.dequeue();
 
-		    Iterator<VertexInterface<T>> neighbors = frontVertex.getNeighborIterator();
+		    Iterator<VertexInterface<E>> neighbors = frontVertex.getNeighborIterator();
 
 		    while (neighbors.hasNext()) {
-			    VertexInterface<T> nextNeighbor = neighbors.next();
+			    VertexInterface<E> nextNeighbor = neighbors.next();
 			    if  (!nextNeighbor.isVisited()) {
 				    nextNeighbor.visit();
 				    traversalOrder.enqueue(nextNeighbor.getLabel());
@@ -34,19 +36,19 @@ public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterfac
 	    return traversalOrder;
     } //end getBreadthFirstTraversal
 
-	public QueueInterface<T> getDepthFirstTraversal(T origin) {
+	public QueueInterface<E> getDepthFirstTraversal(E origin) {
 		resetVertices();
-    	QueueInterface<T> traversalOrder = new LinkedQueue<T>();
-    	StackInterface<VertexInterface<T>> vertexStack = new LinkedStack<>();
+    	QueueInterface<E> traversalOrder = new LinkedQueue<E>();
+    	StackInterface<VertexInterface<E>> vertexStack = new LinkedStack<>();
     	
-    	VertexInterface<T> originVertex = vertices.getValue(origin);
+    	VertexInterface<E> originVertex = vertices.getValue(origin);
     	originVertex.visit();
     	traversalOrder.enqueue(origin);;
     	vertexStack.push(originVertex);
     	
     	while(!vertexStack.isEmpty()) {
-    		VertexInterface<T> topVertex = vertexStack.peek();
-    		VertexInterface<T> nextNeighbor = topVertex.getUnvisitedNeighbor();
+    		VertexInterface<E> topVertex = vertexStack.peek();
+    		VertexInterface<E> nextNeighbor = topVertex.getUnvisitedNeighbor();
     		
     		if (nextNeighbor != null) {
     			nextNeighbor.visit();
@@ -58,65 +60,111 @@ public class Graph<T> implements GraphAlgorithmsInterface<T>, BasicGraphInterfac
     	}
     	return traversalOrder;
 	} //end getDepthFirstTraversal
+    
+    //constructors
+    public Graph (int n)
+    {
+        edges = new boolean[n][n];
+        labels = (E[]) new Object[n]; //unchecked cast safe because entries are null
+    }//end Constructor
 
-	public boolean addEdge(T begin, T end) {
-	    return addEdge(begin, end);
-	} //end AddEdge
+    /**
+     * Sees if something is an edge or not.
+     * @param source Source of edge to be checked.
+     * @param target Target of edge to be checked.
+     * @return
+     */
+    public boolean isEdge(int source, int target)
+    {
+        return edges[source][target];
+    }//end isEdge
 
-	public boolean hasEdge(T begin, T end) {
-        boolean found = false;
-        VertexInterface<T> beginVertex = vertices.getValue(begin);
-        VertexInterface<T> endVertex = vertices.getValue(end);
-        if ( (beginVertex != null) && (endVertex != null)) {
-            Iterator<VertexInterface<T>> neighbors = beginVertex.getNeighborIterator();
-            while (!found && neighbors.hasNext()) {
-                VertexInterface<T> nextNeighbor = neighbors.next();
-                if (endVertex.equals(nextNeighbor))
-                    found = true;
-            } // end while
-        } // end if
-        return found;
-    } //end hasEdge
+    /**
+     * Adds an edge to the graph.
+     * @param source The source of the edge.
+     * @param target The target of the edge.
+     */
+    public void addEdge(int source, int target)
+    {
+        edges[source][target] = true;
+    }//end addEdge
 
-	public boolean isEmpty() {
-		return vertices.isEmpty();
-	} //end isEmpty
+    /**
+     * Gets the label of a vertex.
+     * @param vertex The input vertex.
+     * @return The label of the input vertex.
+     */
+    public E getLabel(int vertex)
+    {
+        return labels[vertex];
+    }//end getLabel
 
-	public int getNumberOfVertices() {
-        return vertices.getSize();
-    } //end getNumberOfVertices
+    /**
+     * Finds neighbors of input vertex.
+     * @param vertex The input vertex.
+     * @return An int array of the indices of neighboring vertices.
+     */
+    public int[] neighbors (int vertex)
+    {
+        int i;
+        int count = 0;
+        int[] answer;
 
-	public int getNumberOfEdges() {
-	       return edgeCount;
-	} //end getNumberOfEdges
-	
-	public void clear() {
-	        vertices.clear();
-	        edgeCount = 0; 
-	} //end clear
-	
-	public void resetVertices() {
-		Iterator<VertexInterface<T>> vertexIterator = vertices.getValueIterator();
+        for (i = 0; i < labels.length; i++)
+        {
+            if (edges[vertex][i])
+            {
+                count++;
+            }
+        }
+
+        answer = new int[count];
+        count = 0;
+        for (i = 0; i < labels.length; i++)
+        {
+            if (edges[vertex][i])
+            {
+                answer[count++] = i;
+            }
+        }
+        return answer;
+    }//end neighbors
+
+    /**
+     * Removes an edge from a graph.
+     * @param source Source of the edge to be removed.
+     * @param target Target of the edge to be removed.
+     */
+    public void removeEdge(int source, int target)
+    {
+        edges[source][target] = false;
+    }//end removeEdge
+
+    /**
+     * Sets the label of a vertex in the graph.
+     * @param vertex The vertex to be set.
+     * @param newLabel The label to be given.
+     */
+    public void setLabel(int vertex, E newLabel)
+    {
+        labels[vertex] = newLabel;
+    }//end setLabel
+
+    /**
+     * Gives the size of the Graph.
+     * @return The length of the labels array.
+     */
+    public int size()
+    {
+        return labels.length;
+    }//end size
+
+	private void resetVertices() {
+		Iterator<VertexInterface<E>> vertexIterator = vertices.getValueIterator();
 		while (vertexIterator.hasNext()) {
-			VertexInterface<T> nextVertex = vertexIterator.next();
+			VertexInterface<E> nextVertex = vertexIterator.next();
 			nextVertex.unvisit();
-		} 
-	} //end resetVertices
+		}
+	}
 
-	public DictionaryInterface<T, VertexInterface<T>> getVertices() {
-		return vertices;
-	} //end getVertices
-
-	public void setVertices(DictionaryInterface<T, VertexInterface<T>> vertices) {
-		this.vertices = vertices;
-	} //end setVertices
-
-	public int getEdgeCount() {
-		return edgeCount;
-	} //end getEdgeCount
-
-	public void setEdgeCount(int edgeCount) {
-		this.edgeCount = edgeCount;
-	} //end setEdgeCount
-} //end Graph
-
+}//end Graph
