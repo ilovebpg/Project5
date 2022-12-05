@@ -93,4 +93,5 @@ public final class LinkedQueue<T> implements QueueInterface<T> {
             next = nextNode;
         } // end setNextNode
     } // end Node
+
 } // end LinkedQueue
