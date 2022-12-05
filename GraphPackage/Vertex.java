@@ -40,7 +40,7 @@ class Vertex<T> implements VertexInterface<T> {
    }
 
    public boolean isVisited() {
-
+	   return visited;
    }
 
    public Iterator<VertexInterface<T>> getNeighborIterator() {
@@ -61,6 +61,27 @@ class Vertex<T> implements VertexInterface<T> {
       } //end while
       return result;
    } //end getUnvisitedNeighbor
+
+   public void setPredecessor(VertexInterface<T> predecessor) {
+      
+   }
+
+   public VertexInterface<T> getPredecessor() {
+	   return previousVertex;
+   }
+
+   public boolean hasPredecessor() {
+	return visited;
+	   
+   }
+
+   public void setCost(double newCost) {
+      cost = newCost;
+   }
+
+   public double getCost() {
+      return cost;
+   }
 
    private class NeighborIterator implements Iterator<VertexInterface<T>> {
       private Iterator<Edge> edges;
