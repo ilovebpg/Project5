@@ -11,7 +11,7 @@ import ADTPackage.*; // Classes that implement various ADTs
 class Vertex<T> implements VertexInterface<T> {
 	
    private T label;
-   private ListWithIteratorInterface<Edge> edgeList; // Edges to neighbors
+   private LinkedListWithIterator<Edge> edgeList; // Edges to neighbors
    private boolean visited;                          // True if visited
    private VertexInterface<T> previousVertex;        // On path to this vertex
    private double cost;                              // Of path to this vertex
@@ -40,7 +40,7 @@ class Vertex<T> implements VertexInterface<T> {
    }
 
    public boolean isVisited() {
-
+	   return visited;
    }
 
    public boolean connect(VertexInterface<T> endVertex, double edgeWeight) {
@@ -89,11 +89,12 @@ class Vertex<T> implements VertexInterface<T> {
    }
 
    public VertexInterface<T> getPredecessor() {
-
+	   return previousVertex;
    }
 
    public boolean hasPredecessor() {
-
+	return visited;
+	   
    }
 
    public void setCost(double newCost) {
