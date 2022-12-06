@@ -1,5 +1,6 @@
 package ADTPackage;
 
+@SuppressWarnings("serial")
 public class EmptyQueueException extends java.lang.Exception {
 	
     public EmptyQueueException() {
