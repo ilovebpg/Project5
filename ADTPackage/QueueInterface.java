@@ -8,7 +8,7 @@ package ADTPackage;
 public interface QueueInterface<T> {
   /** Adds a new entry to the back of this queue.
       @param originVertex  An object to be added. */
-  public void enqueue(T newEntry);
+  public void enqueue(T origin);
   
   /** Removes and returns the entry at the front of this queue.
       @return  The object at the front of the queue. 
