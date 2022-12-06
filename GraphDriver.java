@@ -2,10 +2,12 @@ import ADTPackage.*;
 import GraphPackage.Graph;
 
 public class GraphDriver {
-    public static void main(String[] args) throws EmptyQueueException
+    @SuppressWarnings("unchecked")
+	public static void main(String[] args) throws EmptyQueueException
     {
         //init graph
-        Graph<String> test = new Graph<String>(9);
+        @SuppressWarnings("rawtypes")
+		Graph test = new Graph<>(9);
 
         //set labels
         test.setLabel(0, "A");
@@ -48,7 +50,7 @@ public class GraphDriver {
         System.out.println();
 
         System.out.println("Expected DFT: A B E F C H I D G");
-        //System.out.println("Actual DFT: " + test.getDepthFirstTraversal(0));
+        System.out.println("Actual DFT: " + test.getDepthFirstTraversal(0));
         
     }//end main
 }//end Driver

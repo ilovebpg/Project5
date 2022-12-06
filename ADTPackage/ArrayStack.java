@@ -9,29 +9,67 @@ public class ArrayStack<T> implements StackInterface<T> {
     private static final int MAX_CAPACITY = 10000;
     private boolean integrityOK = false;
 
+
+    //-----Contsructors-----
     public ArrayStack() {
         this(DEFAULT_CAPACITY);
-    } //end ArrayStack
+    }//end default constructor
 
     public ArrayStack(int initialCapacity) {
-        integrityOK = false;
-        checkCapacity(initialCapacity);
-        
-        // The cast is safe because the new array contains null entries
-        @SuppressWarnings("unchecked")
-        T[] tempStack = (T[])new Object[initialCapacity]; // Unchecked cast
-        stack = tempStack;
-        topIndex = -1;
-        integrityOK = true;
-	} //end ArrayStack
+      integrityOK = false;
+      checkCapacity(initialCapacity);
+      
+      // The cast is safe because the new array contains null entries
+      @SuppressWarnings("unchecked")
+      T[] tempStack = (T[])new Object[initialCapacity]; // Unchecked cast
+      stack = tempStack;
+      topIndex = -1;
+      integrityOK = true;
+	}
 
-    public ArrayStack(T[] contents) {
-        checkCapacity(contents.length);
-        stack = Arrays.copyOf(contents, contents.length);
-        topIndex= 0;
-        integrityOK = true;
-    } //end ArrayStack
+    public ArrayStack(T[] contents)  {
+      checkCapacity(contents.length);
+      stack = Arrays.copyOf(contents, contents.length);
+      topIndex= 0;
+      integrityOK = true;
+   }
+    //end constructors
 
+    //-----Security checks-----
+    private void checkintegrity() {
+      if (!integrityOK)
+         throw new SecurityException ("ArrayBag object is corrupt.");
+    }
+
+    // Throws an exception if the client requests a capacity that is too large.
+    private void checkCapacity(int capacity) {
+      if (capacity > MAX_CAPACITY)
+         throw new IllegalStateException("Attempt to create a bag whose capacity exceeds " +
+                                         "allowed maximum of " + MAX_CAPACITY);
+    } // end checkCapacity
+
+    private void ensureCapacity() {
+        if (topIndex >= stack.length -1) {
+            int newLength = 2 * stack.length;
+            checkCapacity(newLength);
+            stack = Arrays.copyOf(stack, newLength);
+        }//end if
+    }//end ensureCapacity
+
+    public boolean isEmpty() {
+        return topIndex < 0;
+    }
+
+    public void clear() {
+        checkintegrity();
+        while(topIndex > -1) {
+            stack[topIndex] = null;
+            topIndex--;
+        }//end while
+        //Assertion: topIndex is -1
+    }//end clear
+
+    //----------------methods--------------------
     public void push(T newEntry) {
         checkintegrity();
         ensureCapacity();
@@ -44,13 +82,13 @@ public class ArrayStack<T> implements StackInterface<T> {
         if (isEmpty()) {
             throw new EmptyStackException();
         }
-        else{
+        else {
             T top = stack[topIndex];
             stack[topIndex] = null;
             topIndex--;
             return top;
-        } //end if
-    } //end pop
+        }
+    }
 
     public T peek() throws EmptyStackException {
         checkintegrity();
@@ -61,34 +99,4 @@ public class ArrayStack<T> implements StackInterface<T> {
         }
     }//end peek
 
-    public boolean isEmpty() {
-        return topIndex < 0;
-    }
-
-    public void clear() {
-        checkintegrity();
-        while(topIndex > -1) {
-            stack[topIndex] = null;
-            topIndex--;
-        }//end while
-    }//end clear
-
-    private void checkintegrity() {
-        if (!integrityOK)
-            throw new SecurityException ("ArrayBag object is corrupt.");
-    } //end checkIntegrity
-
-    private void checkCapacity(int capacity) {
-        if (capacity > MAX_CAPACITY)
-            throw new IllegalStateException("Attempt to create a bag whose capacity exceeds allowed maximum of " + MAX_CAPACITY);
-    } // end checkCapacity
-
-    private void ensureCapacity() {
-        if (topIndex >= stack.length -1) {
-            int newLength = 2 * stack.length;
-            checkCapacity(newLength);
-            stack = Arrays.copyOf(stack, newLength);
-        }//end if
-    }//end ensureCapacity
-    
-}//end ResizeableArrayStack
+}//end ArrayStack
